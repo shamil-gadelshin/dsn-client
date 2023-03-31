@@ -1,0 +1,75 @@
+[package]
+name = "dsn-client"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#subspace-networking = { path = "../../work/subspace/subspace/crates/subspace-networking"}
+#subspace-farmer = { path = "../../work/subspace/subspace/crates/subspace-farmer"}
+#subspace-farmer-components = { path = "../../work/subspace/subspace/crates/subspace-farmer-components"}
+subspace-networking = { git = "https://github.com/subspace/subspace", branch="main"}
+subspace-farmer = {git = "https://github.com/subspace/subspace", branch="main"}
+subspace-farmer-components = { git = "https://github.com/subspace/subspace", branch="main"}
+subspace-core-primitives = { git = "https://github.com/subspace/subspace", branch="main"}
+parity-scale-codec = "3.2.1"
+parking_lot = "0.12.1"
+futures = "0.3.25"
+tempfile = "3.3.0"
+tokio = { version = "1.21.2", features = ["macros", "parking_lot", "rt-multi-thread", "signal"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+
+[dependencies.libp2p]
+# TODO: change to upstream release when https://github.com/libp2p/rust-libp2p/pull/3287 is released
+git = "https://github.com/subspace/rust-libp2p"
+rev = "917b388b0549810903946664a61c9b313b2e9fad"
+#rev = "2de61da642888e3c4deac9925be90d56cdef1475"
+default-features = false
+features = [
+    "dns",
+    "gossipsub",
+    "identify",
+    "kad",
+    "macros",
+    "metrics",
+    "noise",
+    "ping",
+    "request-response",
+    "serde",
+    "tcp",
+    "tokio",
+    "websocket",
+    "yamux",
+]
+
+
+#[dependencies.libp2p]
+## TODO: change when https://github.com/libp2p/rust-libp2p/pull/3178 is released
+#git = "https://github.com/libp2p/rust-libp2p"
+#rev = "be0b62a78fe9d72811b9eda742137cc8ddc4da35"
+#default-features = false
+#features = [
+#    "dns",
+#    "gossipsub",
+#    "identify",
+#    "kad",
+#    "macros",
+#    "metrics",
+#    "mplex",
+#    "noise",
+#    "ping",
+#    "request-response",
+#    "serde",
+#    "tcp",
+#    "tokio",
+#    "websocket",
+#    "yamux",
+#]
+
+
+[patch.crates-io]
+# TODO: Remove once chacha20poly1305 0.10 appears in libp2p's dependencies
+chacha20poly1305 = { git = "https://github.com/RustCrypto/AEADs", rev = "06dbfb5571687fd1bbe9d3c9b2193a1ba17f8e99" }
+
