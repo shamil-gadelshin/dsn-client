@@ -1,8 +1,13 @@
+#![allow(dead_code)]
 use futures::StreamExt;
 use subspace_core_primitives::{Piece, PieceIndex, PieceIndexHash};
 use subspace_networking::utils::multihash::ToMultihash;
 use subspace_networking::{Node, PieceByHashRequest, PieceByHashResponse};
 use tracing::{debug, info, trace, warn};
+
+
+// let piece = get_piece_from_storage(node.clone(), piece_index).await;
+// println!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
 
 // Get from piece cache (L2) or archival storage (L1)
 pub async fn get_piece_from_storage(dsn_node: Node, piece_index: PieceIndex) -> Option<Piece> {

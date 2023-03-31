@@ -6,13 +6,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-#subspace-networking = { path = "../../work/subspace/subspace/crates/subspace-networking"}
-#subspace-farmer = { path = "../../work/subspace/subspace/crates/subspace-farmer"}
-#subspace-farmer-components = { path = "../../work/subspace/subspace/crates/subspace-farmer-components"}
-subspace-networking = { git = "https://github.com/subspace/subspace", branch="main"}
-subspace-farmer = {git = "https://github.com/subspace/subspace", branch="main"}
-subspace-farmer-components = { git = "https://github.com/subspace/subspace", branch="main"}
-subspace-core-primitives = { git = "https://github.com/subspace/subspace", branch="main"}
+subspace-networking = { path = "../../work/subspace/subspace/crates/subspace-networking"}
+subspace-farmer = { path = "../../work/subspace/subspace/crates/subspace-farmer"}
+subspace-farmer-components = { path = "../../work/subspace/subspace/crates/subspace-farmer-components"}
+subspace-core-primitives = { path = "../../work/subspace/subspace/crates/subspace-core-primitives"}
+#subspace-networking = { git = "https://github.com/subspace/subspace", branch="main"}
+#subspace-farmer = {git = "https://github.com/subspace/subspace", branch="main"}
+#subspace-farmer-components = { git = "https://github.com/subspace/subspace", branch="main"}
+#subspace-core-primitives = { git = "https://github.com/subspace/subspace", branch="main"}
 parity-scale-codec = "3.2.1"
 parking_lot = "0.12.1"
 futures = "0.3.25"
@@ -24,8 +25,8 @@ tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 [dependencies.libp2p]
 # TODO: change to upstream release when https://github.com/libp2p/rust-libp2p/pull/3287 is released
 git = "https://github.com/subspace/rust-libp2p"
-rev = "917b388b0549810903946664a61c9b313b2e9fad"
-#rev = "2de61da642888e3c4deac9925be90d56cdef1475"
+#rev = "917b388b0549810903946664a61c9b313b2e9fad"
+rev = "2de61da642888e3c4deac9925be90d56cdef1475"
 default-features = false
 features = [
     "dns",

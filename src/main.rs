@@ -1,6 +1,6 @@
 use crate::features::configuration::configure_dsn;
-use crate::features::get_piece::get_piece_from_storage;
 use subspace_core_primitives::PieceIndex;
+use crate::features::announce_piece::announce_piece;
 
 mod features;
 
@@ -17,11 +17,9 @@ async fn main() {
     let _ = node.wait_for_connected_peers().await.unwrap();
     println!("Connected to DSN.");
 
-    let piece_index: PieceIndex = 200.into();
+    let piece_index: PieceIndex = 200u64.into();
+    announce_piece(node.clone(), piece_index).await;
 
-    //  let key = PieceIndexHash::from_index(piece_index).to_multihash();
-
-    let piece = get_piece_from_storage(node.clone(), piece_index).await;
-
-    println!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
+   // let piece = get_piece_from_storage(node.clone(), piece_index).await;
+//    println!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
 }

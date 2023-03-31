@@ -5,18 +5,21 @@ use parking_lot::Mutex;
 use std::sync::Arc;
 use subspace_networking::{
     BootstrappedNetworkingParameters, Config, MemoryProviderStorage, Node,
-    PieceByHashRequestHandler,
+    PieceAnnouncementRequestHandler, PieceByHashRequestHandler,
 };
 
 pub async fn configure_dsn(bootstrap_address: String) -> Node {
     let config_1 = Config::<MemoryProviderStorage> {
         listen_on: vec!["/ip4/0.0.0.0/tcp/40001".parse().unwrap()],
-        allow_non_global_addresses_in_dht: false,
+        allow_non_global_addresses_in_dht: true,
         networking_parameters_registry: BootstrappedNetworkingParameters::new(vec![
             bootstrap_address.parse().unwrap(),
         ])
         .boxed(),
-        request_response_protocols: vec![PieceByHashRequestHandler::create(|_| async { None })],
+        request_response_protocols: vec![
+            PieceByHashRequestHandler::create(|_, _| async { None }),
+            PieceAnnouncementRequestHandler::create(|_, _| async { None }),
+        ],
         provider_storage: MemoryProviderStorage::new(PeerId::random()),
         ..Config::default()
     };
