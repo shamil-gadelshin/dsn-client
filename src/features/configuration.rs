@@ -1,15 +1,17 @@
 use futures::channel::oneshot;
 use libp2p::multiaddr::Protocol;
-use libp2p::PeerId;
+use libp2p::{identity};
 use parking_lot::Mutex;
 use std::sync::Arc;
-use subspace_networking::{
-    BootstrappedNetworkingParameters, Config, MemoryProviderStorage, Node,
-    PieceAnnouncementRequestHandler, PieceByHashRequestHandler,
-};
+use subspace_networking::{BootstrappedNetworkingParameters, Config, Node, PieceAnnouncementRequestHandler, PieceByHashRequestHandler, VoidProviderStorage};
 
-pub async fn configure_dsn(bootstrap_address: String) -> Node {
-    let config_1 = Config::<MemoryProviderStorage> {
+pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static str) -> Node {
+    let ed25519_keypair = identity::ed25519::Keypair::generate();
+
+    let keypair = identity::Keypair::Ed25519(ed25519_keypair);
+    let default_config = Config::new(protocol_prefix.to_string(), keypair, VoidProviderStorage);
+
+    let config_1 = Config::<VoidProviderStorage> {
         listen_on: vec!["/ip4/0.0.0.0/tcp/40001".parse().unwrap()],
         allow_non_global_addresses_in_dht: true,
         networking_parameters_registry: BootstrappedNetworkingParameters::new(vec![
@@ -17,11 +19,11 @@ pub async fn configure_dsn(bootstrap_address: String) -> Node {
         ])
         .boxed(),
         request_response_protocols: vec![
-            PieceByHashRequestHandler::create(|_, _| async { None }),
+            PieceByHashRequestHandler::create(|_,_| async { None }),
             PieceAnnouncementRequestHandler::create(|_, _| async { None }),
         ],
-        provider_storage: MemoryProviderStorage::new(PeerId::random()),
-        ..Config::default()
+    //    protocol_prefix,
+        ..default_config
     };
     let (node, mut node_runner_1) = subspace_networking::create(config_1).unwrap();
 

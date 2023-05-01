@@ -25,8 +25,8 @@ tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 [dependencies.libp2p]
 # TODO: change to upstream release when https://github.com/libp2p/rust-libp2p/pull/3287 is released
 git = "https://github.com/subspace/rust-libp2p"
-#rev = "917b388b0549810903946664a61c9b313b2e9fad"
-rev = "2de61da642888e3c4deac9925be90d56cdef1475"
+rev = "917b388b0549810903946664a61c9b313b2e9fad"
+#rev = "2de61da642888e3c4deac9925be90d56cdef1475"
 default-features = false
 features = [
     "dns",

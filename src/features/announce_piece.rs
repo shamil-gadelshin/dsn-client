@@ -1,7 +1,8 @@
 use futures::StreamExt;
+use libp2p::Multiaddr;
 use subspace_core_primitives::{PieceIndex, PieceIndexHash};
 use subspace_networking::utils::multihash::ToMultihash;
-use subspace_networking::{Node, PieceAnnouncementRequest, PieceAnnouncementResponse};
+use subspace_networking::{Node, PieceAnnouncementRequest};
 use tracing::{info, warn};
 
 pub async fn announce_piece(dsn_node: Node, piece_index: PieceIndex) {
@@ -19,6 +20,7 @@ pub async fn announce_piece(dsn_node: Node, piece_index: PieceIndex) {
                         peer_id,
                         PieceAnnouncementRequest {
                             piece_key: key.to_bytes(),
+                            addresses: vec!["/ip4/0.0.0.0/tcp/40001".parse::<Multiaddr>().unwrap().to_vec()]
                         },
                     )
                     .await;
