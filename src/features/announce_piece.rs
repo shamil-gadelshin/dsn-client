@@ -6,7 +6,7 @@ use subspace_networking::{Node, PieceAnnouncementRequest};
 use tracing::{info, warn};
 
 pub async fn announce_piece(dsn_node: Node, piece_index: PieceIndex) {
-    let key = PieceIndexHash::from_index(piece_index).to_multihash();
+    let key = PieceIndexHash::from(piece_index).to_multihash();
 
     let get_closest_peers_result = dsn_node.get_closest_peers(key).await;
 
@@ -20,13 +20,13 @@ pub async fn announce_piece(dsn_node: Node, piece_index: PieceIndex) {
                         peer_id,
                         PieceAnnouncementRequest {
                             piece_key: key.to_bytes(),
-                            addresses: vec!["/ip4/0.0.0.0/tcp/40001".parse::<Multiaddr>().unwrap().to_vec()]
+                            addresses: vec!["/ip4/8.8.8.8/tcp/40001".parse::<Multiaddr>().unwrap().to_vec()]
                         },
                     )
                     .await;
 
                 match request_result {
-                    Ok(PieceAnnouncementResponse) => {
+                    Ok(_) => {
                         info!(%peer_id, %piece_index, ?key, "Piece announcement succeeded.");
                     }
                     Err(error) => {

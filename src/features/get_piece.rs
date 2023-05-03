@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 use futures::StreamExt;
+use libp2p::PeerId;
 use subspace_core_primitives::{Piece, PieceIndex, PieceIndexHash};
 use subspace_networking::utils::multihash::ToMultihash;
 use subspace_networking::{Node, PieceByHashRequest, PieceByHashResponse};
@@ -11,8 +12,8 @@ use tracing::{debug, info, trace, warn};
 
 // Get from piece cache (L2) or archival storage (L1)
 pub async fn get_piece_from_storage(dsn_node: Node, piece_index: PieceIndex) -> Option<Piece> {
-    let key = PieceIndexHash::from_index(piece_index).to_multihash();
-    let hash = PieceIndexHash::from_index(piece_index);
+    let key = PieceIndexHash::from(piece_index).to_multihash();
+    let hash = PieceIndexHash::from(piece_index);
 
     let get_providers_result = dsn_node.get_providers(key).await;
 
@@ -50,4 +51,24 @@ pub async fn get_piece_from_storage(dsn_node: Node, piece_index: PieceIndex) -> 
     }
 
     None
+}
+pub async fn get_providers(dsn_node: Node, piece_index: PieceIndex) -> Vec<PeerId> {
+    let key = PieceIndexHash::from(piece_index).to_multihash();
+
+    let get_providers_result = dsn_node.get_providers(key).await;
+    let mut providers = Vec::new();
+    match get_providers_result {
+        Ok(mut get_providers_stream) => {
+            while let Some(provider_id) = get_providers_stream.next().await {
+                info!(%piece_index, %provider_id, "get_providers returned an item");
+
+                providers.push(provider_id);
+            }
+        }
+        Err(err) => {
+            warn!(%piece_index,?key, ?err, "get_providers returned an error");
+        }
+    }
+
+    providers
 }
