@@ -1,27 +1,29 @@
+#![allow(deprecated)]
 use futures::channel::oneshot;
 use libp2p::multiaddr::Protocol;
 use libp2p::{identity};
 use parking_lot::Mutex;
 use std::sync::Arc;
-use subspace_networking::{BootstrappedNetworkingParameters, Config, Node, PieceAnnouncementRequestHandler, PieceByHashRequestHandler, VoidProviderStorage};
+use futures::future::pending;
+use subspace_networking::{StubNetworkingParametersManager, Config, Node, PieceAnnouncementRequestHandler, PieceByHashRequestHandler, VoidProviderStorage, PeerInfoProvider};
 
 pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static str) -> Node {
     let ed25519_keypair = identity::ed25519::Keypair::generate();
 
     let keypair = identity::Keypair::Ed25519(ed25519_keypair);
-    let default_config = Config::new(protocol_prefix.to_string(), keypair, VoidProviderStorage);
+    let default_config = Config::new(protocol_prefix.to_string(), keypair, VoidProviderStorage, PeerInfoProvider::Client);
 
     let config_1 = Config::<VoidProviderStorage> {
         listen_on: vec!["/ip4/0.0.0.0/tcp/40001".parse().unwrap()],
         allow_non_global_addresses_in_dht: true,
-        networking_parameters_registry: BootstrappedNetworkingParameters::new(vec![
-            bootstrap_address.parse().unwrap(),
-        ])
+        networking_parameters_registry: StubNetworkingParametersManager
+
         .boxed(),
         request_response_protocols: vec![
-            PieceByHashRequestHandler::create(|_,_| async { None }),
+            PieceByHashRequestHandler::create(|_, _| async { None }),
             PieceAnnouncementRequestHandler::create(|_, _| async { None }),
         ],
+        bootstrap_addresses: vec![bootstrap_address.parse().unwrap()],
     //    protocol_prefix,
         ..default_config
     };
@@ -39,6 +41,15 @@ pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static 
             }
         }
     }));
+
+    tokio::spawn({
+        let node = node.clone();
+        async move {
+            let _ = node.bootstrap().await;
+
+            pending::<()>().await;
+        }
+    });
 
     tokio::spawn(async move {
         node_runner_1.run().await;
