@@ -25,7 +25,7 @@ tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 
 [dependencies.libp2p]
-version = "0.51.3"
+version = "0.52.1"
 #git = "https://github.com/libp2p/rust-libp2p"
 #rev = "3c5940aeadb9ed8527b6f7aa158797359085293d"
 default-features = false
@@ -38,7 +38,7 @@ features = [
     "metrics",
     "noise",
     "ping",
-    "quic",
+#    "quic",
     "request-response",
     "serde",
     "tcp",

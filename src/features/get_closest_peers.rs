@@ -1,6 +1,5 @@
-use libp2p::multihash::Multihash;
 use libp2p::PeerId;
-use subspace_networking::Node;
+use subspace_networking::{Node, Multihash};
 use tracing::{info, warn};
 use futures::StreamExt;
 
