@@ -21,41 +21,30 @@ async fn main() {
 
  //   get_app_info().await;
 
-    // "/dns/bootstrap-0.gemini-3e.subspace.network/tcp/30433/p2p/12D3KooWMmCyWDJ51HNNcxVSYBMxxcR3RmZrYwwNPVR3upUbPYFt",
-    // "/dns/bootstrap-0.gemini-3e.subspace.network/tcp/30533/p2p/12D3KooWBAKTZKVyon5xZ2aBmRfppU2S1uXn2xzGJJbUctQoQmsC",
-    // "/dns/bootstrap-1.gemini-3e.subspace.network/tcp/30433/p2p/12D3KooWSdYSDDysqP7vQVWYB7yV2eGVcb2VxzUD1FZoBGyGkBDq",
-    // "/dns/bootstrap-1.gemini-3e.subspace.network/tcp/30533/p2p/12D3KooWLKt3vf1iTf9pnLLtVNs4QAv8bq1B9u5C9t1zbA3LczSf"
-
-
     let bootstrap_address =
 //"/dns/bootstrap-0.devnet.subspace.network/tcp/50000/p2p/12D3KooWJgLU8DmkXwBpQtHgSURFfJ4f2SyuNVBgVY96aDJsDWFK"
         "/ip4/127.0.0.1/tcp/50000/p2p/12D3KooWGAjyJAZNNsHu8sV6MP6mXHzNXFQbadjVBFUr5deTiom2"
-
-  //      "/dns/bootstrap-1.gemini-3e.subspace.network/tcp/30433/p2p/12D3KooWSdYSDDysqP7vQVWYB7yV2eGVcb2VxzUD1FZoBGyGkBDq"
-  //      "/dns/bootstrap-1.gemini-3e.subspace.network/tcp/30533/p2p/12D3KooWLKt3vf1iTf9pnLLtVNs4QAv8bq1B9u5C9t1zbA3LczSf"
-  //   ##   "/dns/bootstrap-1.gemini-3e.subspace.network/tcp/30433/p2p/12D3KooWN7Ho6BvcSjNSjA7aMRrjQLWArEq7x271Gfx8GPAZ4QB7"
- //   "/ip4/65.108.232.54/tcp/30433/p2p/12D3KooWPLtT2xUxDrMmuY7WKtZXZMMJdaU2r594kpRZ26dXKHyo"
-  //      "/dns/bootstrap-0.devnet.subspace.network/tcp/50000/p2p/12D3KooWJgLU8DmkXwBpQtHgSURFfJ4f2SyuNVBgVY96aDJsDWFK"
             .to_string();
 
-    let protocol_prefix = "5ff3c20372e77260e0bf7b3daf308e2fc5e949938c7f12f011ecd201816eee20";
+    let protocol_prefix = "7d405a90eb1b02b8516263c5979fa51b02c6c3d8f5df634ca6dd8619fca45479";
 
     let node = configure_dsn(bootstrap_address, protocol_prefix).await;
 
     let _ = node.wait_for_connected_peers(Duration::from_secs(100)).await.unwrap();
     info!("Connected to DSN.");
  //   let piece_index: PieceIndex = 95u64.into();
- //   let piece_index: PieceIndex = 183u64.into();
     let piece_index: PieceIndex = 30u64.into();
 
     //   sleep(Duration::from_secs(10)).await;
     // announce_single_piece_index_hash_with_backoff(piece_index.hash(), &node.clone()).await.unwrap();
     //
-    let providers = get_providers(node.clone(), piece_index).await;
-    info!("Providers: {:?}", providers);
+    // let providers = get_providers(node.clone(), piece_index).await;
+    // info!("Providers: {:?}", providers);
     //
-    // let peers = get_closest_peers(node.clone(), piece_index.hash().to_multihash()).await;
-    // info!("Closest peers: {:?}", peers);
+    let peers = get_closest_peers(node.clone(), piece_index.hash().to_multihash()).await;
+    info!("Closest peers: {:?}", peers);
+
+    sleep(Duration::from_secs(10)).await;
 
     // let piece = get_piece_from_storage(node.clone(), piece_index).await;
     // info!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
