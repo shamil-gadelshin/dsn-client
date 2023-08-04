@@ -6,6 +6,7 @@ use parking_lot::Mutex;
 use std::sync::Arc;
 use futures::future::pending;
 use libp2p::identity::Keypair;
+use libp2p::kad::Mode;
 use subspace_networking::{ Config, Node, PieceAnnouncementRequestHandler, PieceByHashRequestHandler, VoidProviderStorage, PeerInfoProvider};
 
 pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static str) -> Node {
@@ -16,7 +17,7 @@ pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static 
     let config_1 = Config::<VoidProviderStorage> {
         listen_on: vec!["/ip4/0.0.0.0/tcp/40001".parse().unwrap()],
         allow_non_global_addresses_in_dht: true,
-
+        kademlia_mode: Some(Mode::Client),
         request_response_protocols: vec![
             PieceByHashRequestHandler::create(|_, _| async { None }),
             PieceAnnouncementRequestHandler::create(|_, _| async { None }),
