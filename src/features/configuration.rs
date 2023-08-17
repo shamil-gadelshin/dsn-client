@@ -15,8 +15,8 @@ pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static 
     let default_config = Config::new(protocol_prefix.to_string(), keypair,(),  Some(PeerInfoProvider::Client));
 
     let config_1 = Config {
-        listen_on: vec!["/ip4/0.0.0.0/tcp/40001".parse().unwrap()],
-        allow_non_global_addresses_in_dht: true,
+        listen_on: vec!["/ip4/0.0.0.0/tcp/44001".parse().unwrap()],
+        allow_non_global_addresses_in_dht: false,
         kademlia_mode: Some(Mode::Client),
         request_response_protocols: vec![
             PieceByIndexRequestHandler::create(|_, _| async { None }),

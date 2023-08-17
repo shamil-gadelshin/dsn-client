@@ -7,9 +7,9 @@ use crate::features::configuration::configure_dsn;
 use subspace_core_primitives::{PieceIndex, ArchivedHistorySegment};
 use subspace_networking::utils::multihash::ToMultihash;
 use tokio::time::sleep;
-use tracing::info;
+use tracing::{info, warn};
 use crate::features::get_closest_peers::get_closest_peers;
-use crate::features::get_piece::{get_piece_by_hash, get_piece_from_storage, get_providers};
+use crate::features::get_piece::{get_piece_by_index, get_piece_from_storage, get_providers};
 use crate::features::node_client::get_app_info;
 
 mod features;
@@ -24,12 +24,13 @@ async fn main() {
     let bootstrap_address =
 //"/dns/bootstrap-0.devnet.subspace.network/tcp/50000/p2p/12D3KooWJgLU8DmkXwBpQtHgSURFfJ4f2SyuNVBgVY96aDJsDWFK"
 //        "/ip4/127.0.0.1/tcp/60020/p2p/12D3KooWCMSBsA3b4GyndmeehCumxbogUix5GNqALRkauTmfxtWb"
-        "/ip4/127.0.0.1/tcp/50000/p2p/12D3KooWGAjyJAZNNsHu8sV6MP6mXHzNXFQbadjVBFUr5deTiom2"
+   //     "/ip4/127.0.0.1/tcp/50000/p2p/12D3KooWGAjyJAZNNsHu8sV6MP6mXHzNXFQbadjVBFUr5deTiom2"
 //    "/ip4/127.0.0.1/tcp/50020/p2p/12D3KooWNBpUGhjg57pjGqXsEQTRRGBVveAgU5b3JTponfBYrb7V"
  //       "/dns/bootstrap-0.devnet.subspace.network/tcp/30533/p2p/12D3KooWJgLU8DmkXwBpQtHgSURFfJ4f2SyuNVBgVY96aDJsDWFK"
+    "/ip4/176.37.50.72/tcp/30533/p2p/12D3KooWSqGkVVRTeJgFXTiNZRGHSzCSNzPnFpGbwPHe4HXk9y9H"
             .to_string();
 
-    let protocol_prefix = "a00cc45dca77b3558d7f19d645257ec75901a871962aeec14001efbcaa39fbc0";
+    let protocol_prefix = "b868ce3cb5b2a549a9a98bd32bf867f46a33e869399be8e55945d9ccfee07709";
 
     let node = configure_dsn(bootstrap_address, protocol_prefix).await;
 
@@ -54,9 +55,18 @@ async fn main() {
     // let piece = get_piece_from_storage(node.clone(), piece_index).await;
     // info!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
 
-    // let peer_id = PeerId::from_str("12D3KooWCMSBsA3b4GyndmeehCumxbogUix5GNqALRkauTmfxtWb").unwrap();
-    // let piece = get_piece_by_hash(node.clone(), peer_id, piece_index).await;
-    // info!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
+    let peer_id = PeerId::from_str("12D3KooWSqGkVVRTeJgFXTiNZRGHSzCSNzPnFpGbwPHe4HXk9y9H").unwrap();
+
+    for i in 200u64..2000u64 {
+        let piece_index = PieceIndex::from(i);
+        let piece = get_piece_by_index(node.clone(), peer_id, piece_index).await;
+
+        if piece.is_some() {
+            info!(%piece_index, "piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
+        }else {
+            warn!(%piece_index, "piece not found");
+        }
+    }
 }
 
 

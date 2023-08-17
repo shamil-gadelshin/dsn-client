@@ -72,7 +72,7 @@ pub async fn get_providers(dsn_node: Node, piece_index: PieceIndex) -> Vec<PeerI
     providers
 }
 
-pub async fn get_piece_by_hash(dsn_node: Node, peer_id: PeerId, piece_index: PieceIndex) -> Option<Piece> {
+pub async fn get_piece_by_index(dsn_node: Node, peer_id: PeerId, piece_index: PieceIndex) -> Option<Piece> {
     let request_result = dsn_node
         .send_generic_request(
             peer_id,
