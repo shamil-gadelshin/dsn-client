@@ -173,7 +173,7 @@ dependencies = [
  "serde_urlencoded",
  "smallvec",
  "socket2 0.4.9",
- "time 0.3.21",
+ "time",
  "url",
 ]
 
@@ -287,21 +287,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "android-tzdata"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e999941b234f3131b00bc13c22d06e8c5ff726d1b6318ac7eb276997bbb4fef0"
-
-[[package]]
-name = "android_system_properties"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "819e7219dbd41043ac279b19830f2efc897156490d7fd6ea916720117ee66311"
-dependencies = [
- "libc",
-]
-
-[[package]]
 name = "anstream"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -387,7 +372,7 @@ dependencies = [
  "num-traits",
  "rusticata-macros",
  "thiserror",
- "time 0.3.21",
+ "time",
 ]
 
 [[package]]
@@ -587,9 +572,9 @@ dependencies = [
 
 [[package]]
 name = "blake3"
-version = "1.4.0"
+version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "729b71f35bd3fa1a4c86b85d32c8b9069ea7fe14f7a53cfabb65f62d4265b888"
+checksum = "199c42ab6972d92c9f8995f086273d25c42fc0f7b2a1fcefba465c1352d25ba5"
 dependencies = [
  "arrayref",
  "arrayvec 0.7.4",
@@ -597,6 +582,7 @@ dependencies = [
  "cfg-if",
  "constant_time_eq",
  "digest 0.10.7",
+ "rayon",
 ]
 
 [[package]]
@@ -802,22 +788,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "chrono"
-version = "0.4.26"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec837a71355b28f6556dbd569b37b3f363091c0bd4b2e735674521b4c5fd9bc5"
-dependencies = [
- "android-tzdata",
- "iana-time-zone",
- "js-sys",
- "num-traits",
- "serde",
- "time 0.1.45",
- "wasm-bindgen",
- "winapi",
-]
-
-[[package]]
 name = "cipher"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -895,9 +865,9 @@ dependencies = [
 
 [[package]]
 name = "constant_time_eq"
-version = "0.2.5"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13418e745008f7349ec7e449155f419a61b92b58a99cc3616942b926825ec76b"
+checksum = "f7144d30dcf0fafbce74250a3963025d8d52177934239851c917d29f1df280c2"
 
 [[package]]
 name = "convert_case"
@@ -912,7 +882,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e859cd57d0710d9e06c381b550c06e76992472a8c6d527aecd2fc673dcc231fb"
 dependencies = [
  "percent-encoding",
- "time 0.3.21",
+ "time",
  "version_check",
 ]
 
@@ -1177,27 +1147,6 @@ dependencies = [
  "block-buffer 0.10.4",
  "crypto-common",
  "subtle",
-]
-
-[[package]]
-name = "dirs"
-version = "5.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44c45a9d03d6676652bcb5e724c7e988de1acad23a711b5217ab9cbecbec2225"
-dependencies = [
- "dirs-sys",
-]
-
-[[package]]
-name = "dirs-sys"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "520f05a5cbd335fae5a99ff7a6ab8627577660ee5cfd6a94a6a929b52ff0321c"
-dependencies = [
- "libc",
- "option-ext",
- "redox_users",
- "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -1816,29 +1765,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "iana-time-zone"
-version = "0.1.56"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0722cd7114b7de04316e7ea5456a0bbb20e4adb46fd27a3697adb812cff0f37c"
-dependencies = [
- "android_system_properties",
- "core-foundation-sys",
- "iana-time-zone-haiku",
- "js-sys",
- "wasm-bindgen",
- "windows 0.48.0",
-]
-
-[[package]]
-name = "iana-time-zone-haiku"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f31827a206f56af32e590ba56d5d2d085f558508192593743f16b2306495269f"
-dependencies = [
- "cc",
-]
-
-[[package]]
 name = "idna"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1885,7 +1811,7 @@ dependencies = [
  "rtnetlink",
  "system-configuration",
  "tokio",
- "windows 0.34.0",
+ "windows",
 ]
 
 [[package]]
@@ -1977,6 +1903,12 @@ dependencies = [
  "rustix",
  "windows-sys 0.48.0",
 ]
+
+[[package]]
+name = "is_ci"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "616cde7c720bb2bb5824a224687d8f77bfd38922027f01d825cd7453be5099fb"
 
 [[package]]
 name = "itoa"
@@ -2195,6 +2127,7 @@ dependencies = [
  "getrandom 0.2.9",
  "instant",
  "libp2p-allow-block-list",
+ "libp2p-autonat",
  "libp2p-connection-limits",
  "libp2p-core",
  "libp2p-dns",
@@ -2225,6 +2158,25 @@ dependencies = [
  "libp2p-identity",
  "libp2p-swarm",
  "void",
+]
+
+[[package]]
+name = "libp2p-autonat"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e907be08be5e4152317a79d310a6f501a1b5c02a81dcb065dc865475bbae9498"
+dependencies = [
+ "async-trait",
+ "futures",
+ "futures-timer",
+ "instant",
+ "libp2p-core",
+ "libp2p-identity",
+ "libp2p-request-response",
+ "libp2p-swarm",
+ "log",
+ "quick-protobuf",
+ "rand 0.8.5",
 ]
 
 [[package]]
@@ -3050,12 +3002,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
 
 [[package]]
-name = "option-ext"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
-
-[[package]]
 name = "overload"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3533,7 +3479,7 @@ checksum = "ffbe84efe2f38dea12e9bfc1f65377fdf03e53a18cb3b995faedf7934c7e785b"
 dependencies = [
  "pem",
  "ring",
- "time 0.3.21",
+ "time",
  "yasna",
 ]
 
@@ -3553,17 +3499,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "567664f262709473930a4bf9e51bf2ebf3348f2e748ccc50dea20646858f8f29"
 dependencies = [
  "bitflags",
-]
-
-[[package]]
-name = "redox_users"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b033d837a7cf162d7993aded9304e30a83213c648b6e389db233191f891e5c2b"
-dependencies = [
- "getrandom 0.2.9",
- "redox_syscall 0.2.16",
- "thiserror",
 ]
 
 [[package]]
@@ -4182,6 +4117,7 @@ name = "subspace-core-primitives"
 version = "0.1.0"
 dependencies = [
  "blake2",
+ "blake3",
  "blst_rust",
  "derive_more",
  "hex",
@@ -4219,11 +4155,11 @@ dependencies = [
  "backoff",
  "base58",
  "blake2",
+ "blake3",
  "bytesize",
  "clap",
  "cuckoofilter",
  "derive_more",
- "dirs",
  "event-listener-primitives",
  "fdlimit",
  "futures",
@@ -4252,6 +4188,7 @@ dependencies = [
  "subspace-rpc-primitives",
  "subspace-solving",
  "substrate-bip39",
+ "supports-color",
  "tempfile",
  "thiserror",
  "tokio",
@@ -4270,6 +4207,7 @@ dependencies = [
  "bitvec",
  "fs2",
  "futures",
+ "hex",
  "libc",
  "lru",
  "parity-scale-codec",
@@ -4294,17 +4232,15 @@ name = "subspace-networking"
 version = "0.1.0"
 dependencies = [
  "actix-web",
- "anyhow",
  "async-mutex",
  "async-trait",
  "backoff",
  "bytes",
- "bytesize",
- "chrono",
  "clap",
  "derive_more",
  "either",
  "event-listener-primitives",
+ "fs2",
  "futures",
  "futures-timer",
  "hex",
@@ -4313,8 +4249,8 @@ dependencies = [
  "libp2p-kad",
  "libp2p-quic",
  "lru",
+ "memmap2 0.7.1",
  "nohash-hasher",
- "parity-db",
  "parity-scale-codec",
  "parking_lot 0.12.1",
  "pin-project",
@@ -4336,7 +4272,6 @@ dependencies = [
 name = "subspace-proof-of-space"
 version = "0.1.0"
 dependencies = [
- "blake3",
  "chacha20 0.9.1",
  "derive_more",
  "rayon",
@@ -4394,6 +4329,16 @@ name = "subtle"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6bdef32e8150c2a081110b42772ffe7d7c9032b606bc226c8260fd97e0976601"
+
+[[package]]
+name = "supports-color"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4950e7174bffabe99455511c39707310e7e9b440364a2fcb1cc21521be57b354"
+dependencies = [
+ "is-terminal",
+ "is_ci",
+]
 
 [[package]]
 name = "syn"
@@ -4506,17 +4451,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d050e60b33d41c19108b32cea32164033a9013fe3b46cbd4457559bfbf77afaa"
 dependencies = [
  "num_cpus",
-]
-
-[[package]]
-name = "time"
-version = "0.1.45"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b797afad3f312d1c66a56d11d0316f916356d11bd158fbc6ca6389ff6bf805a"
-dependencies = [
- "libc",
- "wasi 0.10.0+wasi-snapshot-preview1",
- "winapi",
 ]
 
 [[package]]
@@ -4889,12 +4823,6 @@ checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
 
 [[package]]
 name = "wasi"
-version = "0.10.0+wasi-snapshot-preview1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
-
-[[package]]
-name = "wasi"
 version = "0.11.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
@@ -5042,15 +4970,6 @@ dependencies = [
  "windows_i686_msvc 0.34.0",
  "windows_x86_64_gnu 0.34.0",
  "windows_x86_64_msvc 0.34.0",
-]
-
-[[package]]
-name = "windows"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e686886bc078bc1b0b600cac0147aadb815089b6e4da64016cbd754b6342700f"
-dependencies = [
- "windows-targets 0.48.0",
 ]
 
 [[package]]
@@ -5258,7 +5177,7 @@ dependencies = [
  "oid-registry",
  "rusticata-macros",
  "thiserror",
- "time 0.3.21",
+ "time",
 ]
 
 [[package]]
@@ -5281,7 +5200,7 @@ version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e17bb3549cc1321ae1296b9cdc2698e2b6cb1992adfa19a8c72e5b7a738f44cd"
 dependencies = [
- "time 0.3.21",
+ "time",
 ]
 
 [[package]]

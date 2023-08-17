@@ -29,14 +29,14 @@ async fn main() {
  //       "/dns/bootstrap-0.devnet.subspace.network/tcp/30533/p2p/12D3KooWJgLU8DmkXwBpQtHgSURFfJ4f2SyuNVBgVY96aDJsDWFK"
             .to_string();
 
-    let protocol_prefix = "4dfbc27ccd94e335e425535e2aac790b1f016f9e1c546edd4b560a251e7382bd";
+    let protocol_prefix = "a00cc45dca77b3558d7f19d645257ec75901a871962aeec14001efbcaa39fbc0";
 
     let node = configure_dsn(bootstrap_address, protocol_prefix).await;
 
 //    let _ = node.wait_for_connected_peers(Duration::from_secs(100)).await.unwrap();
     info!("Connected to DSN.");
  //   let piece_index: PieceIndex = 95u64.into();
-    let piece_index: PieceIndex = 20u64.into();
+    let piece_index: PieceIndex = 237u64.into();
 
     //   sleep(Duration::from_secs(10)).await;
     // announce_single_piece_index_hash_with_backoff(piece_index.hash(), &node.clone()).await.unwrap();
@@ -44,10 +44,10 @@ async fn main() {
     let providers = get_providers(node.clone(), piece_index).await;
     info!("Providers: {:?}", providers);
 
- //   let key = piece_index.hash().to_multihash();
- //    let key = PeerId::random();
- //    let peers = get_closest_peers(node.clone(), key.as_ref().clone()).await;
- //    info!("Closest peers: {:?}", peers);
+   let key = piece_index.to_multihash();
+    // let key = PeerId::random();
+     let peers = get_closest_peers(node.clone(), key.into()).await;
+    info!("Closest peers: {:?}", peers);
 
     // sleep(Duration::from_secs(10)).await;
 
