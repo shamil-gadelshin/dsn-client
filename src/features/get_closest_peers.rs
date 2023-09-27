@@ -1,7 +1,7 @@
-use libp2p::PeerId;
-use subspace_networking::{Node, Multihash};
-use tracing::{info, warn};
 use futures::StreamExt;
+use libp2p::PeerId;
+use subspace_networking::{Multihash, Node};
+use tracing::{info, warn};
 
 #[allow(dead_code)]
 pub async fn get_closest_peers(dsn_node: Node, key: Multihash) -> Vec<PeerId> {

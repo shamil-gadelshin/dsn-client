@@ -6,7 +6,6 @@ use subspace_networking::utils::multihash::ToMultihash;
 use subspace_networking::{Node, PieceByIndexRequest, PieceByIndexResponse};
 use tracing::{debug, info, trace, warn};
 
-
 // let piece = get_piece_from_storage(node.clone(), piece_index).await;
 // println!("piece: {:?}", piece.map(|i| i.len()).unwrap_or_default());
 
@@ -22,12 +21,7 @@ pub async fn get_piece_from_storage(dsn_node: Node, piece_index: PieceIndex) -> 
                 info!(%piece_index, %provider_id, "get_providers returned an item");
 
                 let request_result = dsn_node
-                    .send_generic_request(
-                        provider_id,
-                        PieceByIndexRequest {
-                            piece_index,
-                        },
-                    )
+                    .send_generic_request(provider_id, PieceByIndexRequest { piece_index })
                     .await;
 
                 match request_result {
@@ -72,14 +66,13 @@ pub async fn get_providers(dsn_node: Node, piece_index: PieceIndex) -> Vec<PeerI
     providers
 }
 
-pub async fn get_piece_by_index(dsn_node: Node, peer_id: PeerId, piece_index: PieceIndex) -> Option<Piece> {
+pub async fn get_piece_by_index(
+    dsn_node: Node,
+    peer_id: PeerId,
+    piece_index: PieceIndex,
+) -> Option<Piece> {
     let request_result = dsn_node
-        .send_generic_request(
-            peer_id,
-            PieceByIndexRequest {
-               piece_index,
-            },
-        )
+        .send_generic_request(peer_id, PieceByIndexRequest { piece_index })
         .await;
 
     match request_result {
