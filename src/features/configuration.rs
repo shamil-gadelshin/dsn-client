@@ -7,20 +7,20 @@ use std::sync::Arc;
 use futures::future::pending;
 use libp2p::identity::Keypair;
 use libp2p::kad::Mode;
-use subspace_networking::{ Config, Node, PieceAnnouncementRequestHandler, PieceByHashRequestHandler, VoidProviderStorage, PeerInfoProvider};
+use subspace_networking::{Config, Node, SegmentHeaderBySegmentIndexesRequestHandler, PeerInfoProvider, PieceByIndexRequestHandler};
 
 pub async fn configure_dsn(bootstrap_address: String, protocol_prefix: &'static str) -> Node {
     let keypair = Keypair::generate_ed25519();
 
-    let default_config = Config::new(protocol_prefix.to_string(), keypair, VoidProviderStorage, Some(PeerInfoProvider::Client));
+    let default_config = Config::new(protocol_prefix.to_string(), keypair, (), Some(PeerInfoProvider::Client));
 
-    let config_1 = Config::<VoidProviderStorage> {
-        listen_on: vec!["/ip4/0.0.0.0/tcp/40001".parse().unwrap()],
+    let config_1 = Config::<()> {
+        listen_on: vec!["/ip4/0.0.0.0/tcp/44001".parse().unwrap()],
         allow_non_global_addresses_in_dht: true,
         kademlia_mode: Some(Mode::Client),
         request_response_protocols: vec![
-            PieceByHashRequestHandler::create(|_, _| async { None }),
-            PieceAnnouncementRequestHandler::create(|_, _| async { None }),
+            PieceByIndexRequestHandler::create(|_, _| async { None }),
+            SegmentHeaderBySegmentIndexesRequestHandler::create(|_, _| async { None }),
         ],
         bootstrap_addresses: vec![bootstrap_address.parse().unwrap()],
         ..default_config
